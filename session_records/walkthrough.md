@@ -96,6 +96,27 @@ Chúng tôi đã hoàn thành toàn diện **Giai đoạn 3 (Khắc phục lỗi
 
 ---
 
+## 📈 Phase 4: Cải tiến RSI Range Shift (Dữ liệu lịch sử 30 phiên & Thống kê động)
+
+Để giúp Gemini 3.5 Flash nâng cao khả năng đánh giá xu hướng động (trend) thay vì chỉ nhìn nhận một giá trị tĩnh đơn lẻ, chúng tôi đã hoàn tất việc thiết kế và tích hợp dữ liệu chuỗi thời gian RSI(14) vào pipeline:
+
+1. **Đồng bộ hóa Data Contract (`data_contract.md`):**
+   - Bổ sung trường dữ liệu `rsi_14_history` kiểu `List[float]` (30 phần tử) đại diện cho diễn biến 30 ngày qua của RSI.
+   - Giữ nguyên khóa `rsi_14` để đảm bảo Telegram Bot không bị ảnh hưởng định dạng bảng điểm.
+2. **Cải tiến Engine tính toán (`bot_app/indicators.py`):**
+   - Sửa đổi hàm `calc_ta_indicators()` để tự động trích xuất chuỗi RSI lịch sử 30 phiên gần nhất (đã loại bỏ các giá trị NaN) thông qua `.dropna().tail(30).tolist()`. Các giá trị trả về dưới dạng float nguyên bản của Python, loại bỏ các đối tượng NumPy/Pandas để tránh lỗi JSON.
+3. **Phân tích Thống kê nâng cao & Prompt thông minh (`stock_hunt/ai_analyzer.py`):**
+   - Khi dựng Prompt (`generate_prompt`), hệ thống sẽ tính toán thêm:
+     - Giá trị RSI lớn nhất (Max) và nhỏ nhất (Min) trong 30 phiên.
+     - Độ lệch chuẩn RSI (`Std Dev`) phản ánh độ phẳng của vùng tích lũy hoặc sức mạnh xu hướng.
+   - Định dạng mảng thành chuỗi thời gian trực quan `[T-29: val, ..., T-0: val]` (với T-0 là phiên hiện tại).
+   - Nhúng hướng dẫn chuyên sâu cho AI phân tích dịch chuyển dải sinh thái (RSI Range Shift dải 40/60) để phát hiện sớm các điểm đảo chiều bứt phá nền giá phẳng.
+4. **Nghiệm thu và xác thực dữ liệu thật (`verify_rsi_history.py`):**
+   - Chúng tôi đã viết và chạy tệp kiểm thử live `verify_rsi_history.py` trên môi trường ảo `.venv` kết nối trực tiếp máy chủ dữ liệu.
+   - Kết quả xác thực trên mã **SSI** cực kỳ thành công: nạp thành công 250 phiên OHLCV, trích xuất chính xác 30 phiên RSI lịch sử, hoàn tất chuyển đổi serialize an toàn qua `_to_native()`, và dựng thành công Prompt chuyên nghiệp tuyệt đối với đầy đủ thống kê và chuỗi thời gian.
+
+---
+
 ## 🚀 Hướng dẫn Vận hành Hệ thống
 
 ### Bước 1: Cấu hình API Keys qua tệp `.env`

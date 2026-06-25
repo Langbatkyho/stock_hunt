@@ -21,3 +21,10 @@ Tài liệu này tổng hợp các bài học rút ra từ quá trình phát tri
 ## 4. Kiểm thử sớm (Shift-Left Testing)
 * **Vấn đề đã gặp:** Ở giai đoạn cuối (Phase 3), khi áp dụng hệ thống trên dữ liệu thực tế, người dùng mới đặt câu hỏi về tính chính xác toán học của các bộ lọc.
 * **Bài học (Best Practice):** Bắt buộc xây dựng script Mock Data (`test_scan.py` hoặc `scratch/test_logic.py`) để kiểm tra độ tin cậy của thuật toán (Indicator Engine) trước khi tích hợp vào luồng chính. Thực hiện kiểm thử (TDD) sớm giúp ngăn chặn lỗi rò rỉ dữ liệu.
+
+## 5. Xử lý Lỗi Hệ Thống Ngoại Vi (Resiliency & Fallback)
+* **Vấn đề đã gặp:** Khi gọi API LLM liên tục trong một khoảng thời gian ngắn, hệ thống thường xuyên đối mặt với mã lỗi `429 Resource Exhausted` (giới hạn tần suất) hoặc `503 Service Unavailable` (máy chủ LLM bị quá tải cục bộ). Các lỗi này gây sập tiến trình ngầm và bỏ lỡ cơ hội giao dịch.
+* **Bài học (Best Practice):** 
+  - Đừng tin tưởng tuyệt đối vào độ ổn định của API bên thứ 3. Hệ thống phải trang bị **Double Shield Resiliency**.
+  - Đối với lỗi Rate Limit (`429`), cần áp dụng **API Key Rotation** (Chuyển đổi sang key dự phòng) kết hợp Exponential Backoff.
+  - Đối với lỗi quá tải cục bộ (`503`), việc chờ đợi không giải quyết được vấn đề triệt để. Hệ thống cần áp dụng cơ chế **Fallback Model** (chuyển tạm sang mô hình nhẹ hơn, ví dụ: từ `gemini-3.5-flash` xuống `gemini-2.5-flash`) để duy trì tính liên tục (Business Continuity) của bot.

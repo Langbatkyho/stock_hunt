@@ -26,8 +26,18 @@ TELEGRAM_BOT_TOKEN = os.environ.get("STOCKHUNT_TELEGRAM_BOT_TOKEN", "")
 TELEGRAM_CHAT_ID = os.environ.get("STOCKHUNT_TELEGRAM_CHAT_ID", "")
 GEMINI_API_KEY = os.environ.get("STOCKHUNT_GEMINI_API_KEY", "")
 
+# Hỗ trợ nhiều API key cho Rotation, phân cách bằng dấu phẩy
+raw_keys = os.environ.get("STOCKHUNT_GEMINI_API_KEYS", "")
+if raw_keys:
+    GEMINI_API_KEYS = [k.strip() for k in raw_keys.split(',') if k.strip()]
+elif GEMINI_API_KEY:
+    GEMINI_API_KEYS = [GEMINI_API_KEY]
+else:
+    GEMINI_API_KEYS = []
+
 
 GEMINI_MODEL = "gemini-3.5-flash"
+GEMINI_FALLBACK_MODEL = "gemini-2.5-flash"
 
 # Thời gian quét cố định (giờ Việt Nam GMT+7)
 SCHEDULE_TIMES = ["10:15", "14:05"]

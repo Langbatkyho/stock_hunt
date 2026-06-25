@@ -2,6 +2,11 @@
 
 Tài liệu này lưu trữ lịch sử các giai đoạn phát triển, các bản vá lỗi (hotfix), và các tinh chỉnh kỹ thuật (performance tuning) đã áp dụng vào dự án `stock_hunt`.
 
+## Enterprise-Grade Resiliency & System Polish (Tháng 6/2026)
+- **API Key Rotation & Fallback Model:** Nhằm khắc phục lỗi `429 Resource Exhausted` và `503 Service Unavailable` từ phía máy chủ Google Gemini, hệ thống đã được trang bị cơ chế tự động xoay vòng nhiều API keys dự phòng và cơ chế Fallback thông minh sang model `gemini-2.5-flash` khi model chính bị quá tải.
+- **Exponential Backoff:** Bổ sung cơ chế chống spam/tự động nghỉ lũy tiến để giảm tải máy chủ và duy trì luồng tự động vĩnh viễn.
+- **Cleanup Amnesia (Quy tắc dọn dẹp):** Khởi tạo `GLOBAL_CONSTRAINTS.md`, dọn dẹp các thư viện và hàm bị bỏ quên trong toàn bộ source code (như `_to_native` trong scanner).
+
 ## Tích hợp Tự động hóa qua Windows Task Scheduler (Tháng 5/2026)
 - **Tạo Script tối ưu (`run_hunt_task.bat`):** Loại bỏ lệnh `pause` ở cuối tệp để tránh làm kẹt các tiến trình ngầm (zombie processes) khi Task Scheduler chạy tự động. Tự động áp dụng tham số `--now` để tắt bot ngay sau khi hoàn thành 1 chu kỳ quét.
 - **Tài liệu hóa quy trình cấu hình:** Soạn thảo tệp `task_scheduler_guide.md` hướng dẫn chi tiết các bước thiết lập cấu hình trên giao diện đồ họa của Windows 11 Task Scheduler (bao gồm quyền admin, trigger Daily 10:15/14:05, chạy ẩn Hidden, tự động chạy bù nếu bị lỡ mốc giờ).

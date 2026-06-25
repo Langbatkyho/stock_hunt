@@ -25,6 +25,7 @@ Dưới đây là danh sách đầy đủ các trường dữ liệu và kiểu 
 | `vol_vs_sma20_pct` | Khối lượng giao dịch so với SMA20 (%) | `float` | `98.2` (98.2%) |
 | `active_buy_pct` | Tỷ lệ mua chủ động (%) | `float` | `51.5` (51.5%) |
 | `rsi_14` | Chỉ số RSI 14 phiên | `float` | `48.5` |
+| `rsi_14_history` | Chuỗi lịch sử 30 giá trị RSI gần nhất | `List[float]` | `[45.1, 46.2, ..., 50.1]` |
 | `rsi_status` | Trạng thái RSI | `str` | `"Trung tính"` / `"Quá bán"` |
 | `macd_hist` | Giá trị cột MACD Histogram | `float` | `0.15` |
 | `macd_status` | Trạng thái MACD so với Signal line | `str` | `"Cắt lên"` / `"Cắt xuống"` |

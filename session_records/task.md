@@ -78,3 +78,10 @@
 - [x] Tạo tệp khởi chạy chuyên dụng `run_hunt_task.bat` loại bỏ pause.
 - [x] Soạn thảo hướng dẫn cấu hình chi tiết `task_scheduler_guide.md`.
 - [x] Kiểm tra tích hợp và cập nhật đồng bộ các tài liệu trong `session_records/`.
+
+## Phase 4: Cải tiến RSI Range Shift (Đã hoàn thành)
+- [x] Thay đổi Data Contract (`stock_hunt/session_records/data_contract.md`) bổ sung `rsi_14_history`
+- [x] Cập nhật Engine tính toán (`bot_app/indicators.py`) trích xuất 30 phiên RSI gần nhất không chứa NaN
+- [x] Cập nhật AI Analyzer (`stock_hunt/ai_analyzer.py`) tính toán Min/Max/Std Dev và nhúng chuỗi thời gian RSI lịch sử vào prompt tiếng Việt định hướng lý thuyết RSI Range Shift
+- [x] Chạy nghiệm thu kiểm thử khẩn cấp và kiểm chứng dữ liệu thực tế
+- [x] Cập nhật tài liệu báo cáo `walkthrough.md` trong thư mục `session_records/`
